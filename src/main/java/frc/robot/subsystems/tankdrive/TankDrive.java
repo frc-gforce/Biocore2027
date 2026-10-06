@@ -79,6 +79,7 @@ public class TankDrive<T extends BaseMotor> extends GenericSubsystem {
         odometry = new DifferentialDriveOdometry(headingRotation, leftMotor.getSpeed(), rightMotor.getSpeed());
 
         navx = new AHRS(AHRS.NavXComType.kMXP_SPI);
+        navx.zeroYaw();
 
         kinematics = new DifferentialDriveKinematics(constants.trackWidthMeters());
 
