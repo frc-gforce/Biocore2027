@@ -165,7 +165,7 @@ public class RobotContainer {
                 .withControllerRotationAxis(() -> driverController.getRotate() * -1)
                 .deadband(0.1)
 //                .scaleTranslation(0.8)
-                .allianceRelativeControl(true);
+                .allianceRelativeControl(false);
         swerveDrive.setDefaultCommand(swerveDrive.driveFieldOriented(driveAngularInput));
 //        swerveDrive.setDefaultCommand(swerveDrive.driveRobotRelative(driveAngularInput));
 //        swerveDrive.setDefaultCommand(swerveDrive.driveCommand(
