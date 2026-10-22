@@ -41,10 +41,7 @@ import java.util.function.BooleanSupplier;
  */
 public class RobotContainer {
     //    private final TankDrive<SparkBaseMotor> tankDrive;
-    private final IntakeXShooter intakeXShooter;
-    private final Feed feed;
     private final SwerveDriveSubsystem swerveDrive;
-    private final BackIntake backIntake;
 
 
     private final Joystick driver = new Joystick(OperatorConstants.DRIVER_CONTROLLER_PORT);
@@ -64,17 +61,10 @@ public class RobotContainer {
 //    private final SparkMaxMotor backLeftMotor;
 //    private final SparkMaxMotor backRightMotor;
 
-    private final TalonFXMotor shootMotor;
-    private final SparkMaxMotor feedMotor;
-    private final SparkMaxMotor conveyorMotor;
-
-    private final TalonFXMotor rightIntakeMotor;
-    private final TalonFXMotor leftIntakeMotor;
-    private final SparkMaxMotor openIntakeMotorLeft;
-    private final SparkMaxMotor openIntakeMotorRight;
-
 
     private final SwerveInputStream driveAngularInput;
+
+
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -86,45 +76,6 @@ public class RobotContainer {
 //        backLeftMotor = MotorFactory.createSparkMotor(Motors.BACK_LEFT);
 //        backRightMotor = MotorFactory.createSparkMotor(Motors.BACK_RIGHT);
 
-        shootMotor = MotorFactory.createTalonFXMotor(Motors.SHOOT);
-        shootMotor.setPID(new PID(
-//                0.11,
-//                0,
-//                0,
-//                0.2199,
-//                0.1178,
-//                0,
-//                0
-                0.45,
-                0,
-                0,
-                0,
-                0.12,
-                0,
-                0
-        ));
-        feedMotor = MotorFactory.createSparkMotor(Motors.FEED);
-        conveyorMotor = MotorFactory.createSparkMotor(Motors.CONVEYOR);
-
-
-        rightIntakeMotor = MotorFactory.createTalonFXMotor(Motors.BACK_RIGHT_INTAKE);
-        leftIntakeMotor = MotorFactory.createTalonFXMotor(Motors.BACK_LEFT_INTAKE);
-        openIntakeMotorLeft = MotorFactory.createSparkMotor(Motors.OPEN_INTAKE_LEFT);
-        openIntakeMotorRight = MotorFactory.createSparkMotor(Motors.OPEN_INTAKE_RIGHT);
-
-        openIntakeMotorLeft.setBreak(true);
-        openIntakeMotorRight.setBreak(true);
-
-        //</editor-fold>
-
-
-        //<editor-fold desc="Default motors configs">
-        //TODO put this in a more convenient place
-//        frontLeftMotor.setBreak(false);
-//        frontRightMotor.setBreak(false);
-        shootMotor.setBreak(false);
-        feedMotor.setBreak(false);
-        //</editor-fold>
 
         //<editor-fold desc="Subsystems creation">
         RobotConfig config = null;
@@ -141,22 +92,7 @@ public class RobotContainer {
 //                backLeftMotor,
 //                backRightMotor
 //        );
-        intakeXShooter = new IntakeXShooter(
-                IntakeXShooterConstantsFactory.createIntakeXShooterConstants(),
-                shootMotor,
-                0.5,
-                0.05
-        );
-        feed = new Feed(FeedConstantsFactory.createConstants(), feedMotor, conveyorMotor);
 
-        backIntake = new BackIntake(
-                BackIntakeConstantsFactory.createConstants(),
-                leftIntakeMotor,
-                rightIntakeMotor,
-                openIntakeMotorLeft,
-                openIntakeMotorRight
-        );
-        //</editor-fold>
 
         swerveDrive = new SwerveDriveSubsystem();
         driveAngularInput = SwerveInputStream.of(swerveDrive.getSwerveDrive(),
@@ -175,34 +111,15 @@ public class RobotContainer {
 //                () -> -MathUtil.applyDeadband(driverController.getRightY(), 0.1) // סיבוב
 //        ));
 
+
+
 //        driverChooser.setDefaultOption("Arcade", new DriveArcadeCommand(tankDrive, driverController));
 //        driverChooser.addOption("Tank", new DriveTankCommand(tankDrive, driverController));
 //        SmartDashboard.putData("Drive Mode", driverChooser);
 //        drivetrain.setDefaultCommand(driverChooser.getSelected());
 
-        loadAutos();
         // Configure the trigger bindings
         configureBindings();
-    }
-
-    private void loadAutos() {
-        NamedCommands.registerCommand("OpenIntake", openIntakeCommand().withTimeout(4));
-        NamedCommands.registerCommand("Shoot", shootCommand());
-
-        autoChooser = AutoBuilder.buildAutoChooser();
-
-        Command autonomousShootCommand = GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-//                new AutonomousShootCommand(intakeXShooter, feed, 10),
-                aimCommand().onlyIf(() -> FieldUtils.isInAllianceSide(swerveDrive.getPose())),
-                "Auto Shoot Command");
-        autoChooser.addOption("Bottom Ramp", Autos.bottomRampAuto(autonomousShootCommand, backIntakeCommand(), swerveDrive.stop()));
-        autoChooser.addOption("Bottom Trench", Autos.bottomTrenchAuto(autonomousShootCommand, backIntakeCommand()));
-        autoChooser.addOption("Upper Ramp", Autos.upperRampAuto(autonomousShootCommand, backIntakeCommand()));
-        autoChooser.addOption("Upper Trench", Autos.upperTrenchAuto(autonomousShootCommand, backIntakeCommand()));
-        autoChooser.addOption("Middle", Autos.bottomTrenchToMiddle(autonomousShootCommand, backIntakeCommand(), openIntakeCommand()));
-//        autoChooser.addOption("Test", Autos.testAuto());
-
-        SmartDashboard.putData("Auto", autoChooser);
     }
 
 
@@ -229,29 +146,6 @@ public class RobotContainer {
 //        driverController.faceUp().whileTrue(closeIntakeCommand);
 //        driverController.faceDown().whileTrue(openIntakeCommand);
 
-        // Shoot
-        new Trigger(() -> driverController.getThrottle() * -1 > OperatorConstants.throttleThreshold).whileTrue(
-//                new SequentialCommandGroup(aimCommand().onlyIf(() -> FieldUtils.isInAllianceSide(swerveDrive.getPose())), shootCommand())
-                shootOnTheMoveCommand()
-        );
-        // Intake
-        new Trigger(() -> driverController.getThrottle() * -1 < OperatorConstants.throttleThreshold * -1).whileTrue(
-                backIntakeCommand()
-        );
-        // Shoot + Intake
-        driverController.f1().whileTrue(
-                new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                aimCommand().onlyIf(() -> FieldUtils.isInAllianceSide(swerveDrive.getPose())),
-                                shootCommand()
-                        ),
-                        backIntakeCommand()
-                )
-        );
-
-        driverController.f2().whileTrue(emptyCommand());
-        driverController.x().whileTrue(closeIntakeCommand());
-        driverController.a().whileTrue(openIntakeCommand());
 
         //sets the gyro to zero
         //driverController.y().onTrue(new InstantCommand(swerveDrive::zeroGyro));
@@ -281,66 +175,6 @@ public class RobotContainer {
 //        return swerveDrive.getDefaultCommand();
         return driverChooser.getSelected();
     }
-
-    public void resetOdometry() {
-        swerveDrive.resetOdometry(LimelightUtils.getPose2d());
-    }
-
-    //<editor-fold desc="Commands creation">
-    private Command shootCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new ShootCommand(intakeXShooter, feed, () -> swerveDrive.getPose().getTranslation(), FieldUtils::getHubPose),
-                "Shoot Command"
-        );
-    }
-
-    private Command shootOnTheMoveCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new ShootOnTheMoveCommand(swerveDrive, intakeXShooter, feed, driveAngularInput),
-                "Shoot on the move Command"
-        );
-    }
-
-    private Command intakeCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new IntakeCommand(intakeXShooter, feed),
-                "Intake Command"
-        );
-    }
-
-    private Command backIntakeCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new BackIntakeCommand(backIntake),
-                "Back Intake Command"
-        );
-    }
-
-    private Command openIntakeCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new OpenIntakeCommand(backIntake, feed),
-                "Open Intake Command"
-        );
-    }
-
-    private Command closeIntakeCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new CloseIntakeCommand(backIntake),
-                "Close Intake Command"
-        );
-    }
-
-    private Command aimCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new AimAtHubCommand(swerveDrive),
-                "Aim Command"
-        );
-    }
-
-    private Command emptyCommand() {
-        return GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-                new EmptyingContainer(feed, backIntake),
-                "Empty Container Command"
-        );
-    }
-    //</editor-fold>
 }
+
+

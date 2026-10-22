@@ -39,7 +39,7 @@ public class DriveArcadeCommand extends GenericCommand {
         double right = -driver.getRightX();
         double pct = SmartDashboard.getNumber("Drive Power %", 100.0);
         pct = Math.max(0.0, Math.min(100.0, pct));
-        double power = pct / 100.0;
+        double power = 40 / 100.0;
 
         forward = applyDeadband(forward, 0.1);
         right = applyDeadband(right, 0.1);
