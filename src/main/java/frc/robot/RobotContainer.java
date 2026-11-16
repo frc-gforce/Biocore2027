@@ -13,6 +13,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.*;
@@ -67,6 +68,8 @@ public class RobotContainer {
     private final TalonFXMotor shootMotor;
     private final SparkMaxMotor feedMotor;
     private final SparkMaxMotor conveyorMotor;
+
+    //help
 
     private final TalonFXMotor rightIntakeMotor;
     private final TalonFXMotor leftIntakeMotor;
@@ -204,8 +207,10 @@ public class RobotContainer {
 
         SmartDashboard.putData("Auto", autoChooser);
     }
-
-
+        driverController.f2().onTrue(new InstantCommand(() -> motor.setSpeed(0.2)));
+        driverController.f2().onFalse(new InstantCommand(() -> motor.setSpeed(0)));
+        driverController.b2().onTrue(new InstantCommand(() -> motor.setSpeed(-0.2)));
+        driverController.b2().onFalse(new InstantCommand(() -> motor.setSpeed(0)));
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
      * {@link Trigger#Trigger(BooleanSupplier)} constructor with an arbitrary
