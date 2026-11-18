@@ -66,7 +66,8 @@ public class RobotContainer {
 
     private final TalonFXMotor shootMotor;
     private final SparkMaxMotor feedMotor;
-    private final SparkMaxMotor conveyorMotor;
+    private final TalonFXMotor conveyorMotorLeft;
+    private final TalonFXMotor conveyorMotorRight;
 
     private final TalonFXMotor rightIntakeMotor;
     private final TalonFXMotor leftIntakeMotor;
@@ -104,8 +105,8 @@ public class RobotContainer {
                 0
         ));
         feedMotor = MotorFactory.createSparkMotor(Motors.FEED);
-        conveyorMotor = MotorFactory.createSparkMotor(Motors.CONVEYOR);
-
+        conveyorMotorRight = MotorFactory.createSparkMotor(Motors.CONVEYOR);
+        conveyorMotorLeft
 
         rightIntakeMotor = MotorFactory.createTalonFXMotor(Motors.BACK_RIGHT_INTAKE);
         leftIntakeMotor = MotorFactory.createTalonFXMotor(Motors.BACK_LEFT_INTAKE);
