@@ -7,7 +7,7 @@
   "drive": {
     "type": "krakenx60",
     "id": 3,
-    "canbus": null
+    "canbus": "canivore"
   },
   "angle": {
     "type": "krakenx44",

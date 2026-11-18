@@ -32,7 +32,7 @@ public class BackIntake extends GenericSubsystem {
     }
 
     public void closeIntake() {
-        openIntakeMotorRight.setSpeed(-0.2);
+        openIntakeMotorRight.setSpeed(-0.5);
     }
     public void stopCloseIntake() {
         openIntakeMotorRight.setSpeed(0);

@@ -70,8 +70,8 @@ public class RobotContainer {
 
     private final TalonFXMotor rightIntakeMotor;
     private final TalonFXMotor leftIntakeMotor;
-    private final SparkMaxMotor openIntakeMotorLeft;
-    private final SparkMaxMotor openIntakeMotorRight;
+    private final TalonFXMotor openIntakeMotorLeft;
+    private final TalonFXMotor openIntakeMotorRight;
 
 
     private final SwerveInputStream driveAngularInput;
@@ -109,8 +109,8 @@ public class RobotContainer {
 
         rightIntakeMotor = MotorFactory.createTalonFXMotor(Motors.BACK_RIGHT_INTAKE);
         leftIntakeMotor = MotorFactory.createTalonFXMotor(Motors.BACK_LEFT_INTAKE);
-        openIntakeMotorLeft = MotorFactory.createSparkMotor(Motors.OPEN_INTAKE_LEFT);
-        openIntakeMotorRight = MotorFactory.createSparkMotor(Motors.OPEN_INTAKE_RIGHT);
+        openIntakeMotorLeft = MotorFactory.createTalonFXMotor(Motors.OPEN_INTAKE_LEFT);
+        openIntakeMotorRight = MotorFactory.createTalonFXMotor(Motors.OPEN_INTAKE_RIGHT);
 
         openIntakeMotorLeft.setBreak(true);
         openIntakeMotorRight.setBreak(true);
@@ -239,6 +239,7 @@ public class RobotContainer {
                 backIntakeCommand()
         );
         // Shoot + Intake
+        /*
         driverController.f1().whileTrue(
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
@@ -248,7 +249,9 @@ public class RobotContainer {
                         backIntakeCommand()
                 )
         );
+        */
 
+        driverController.f1().whileTrue(closeIntakeCommand());
         driverController.f2().whileTrue(emptyCommand());
         driverController.x().whileTrue(closeIntakeCommand());
         driverController.a().whileTrue(openIntakeCommand());

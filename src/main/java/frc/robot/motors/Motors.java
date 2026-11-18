@@ -12,10 +12,10 @@ public enum Motors {
     BACK_LEFT(6, "Back Left Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, true, CanbusLoop.rio),
     SHOOT(10, "Shoot Motor", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
     FEED(23, "Feed Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, true, CanbusLoop.rio),
-    BACK_RIGHT_INTAKE(9, "Back Right Intake Motor", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
+    BACK_RIGHT_INTAKE(60, "Back Right Intake Motor", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
     BACK_LEFT_INTAKE(11, "Back Left Intake Motor", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
-    OPEN_INTAKE_RIGHT(24, "Open Intake Motor Right", MotorType.kBrushless, MotorBrand.SPARK_MAX, false, CanbusLoop.rio),
-    OPEN_INTAKE_LEFT(25, "Open Intake Motor Left", MotorType.kBrushless, MotorBrand.SPARK_MAX, false, CanbusLoop.rio),
+    OPEN_INTAKE_RIGHT(10, "Open Intake Motor Right", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
+    OPEN_INTAKE_LEFT(9, "Open Intake Motor Left", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
     CONVEYOR(1, "Conveyor Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, false, CanbusLoop.rio);
 
     public final int id;
