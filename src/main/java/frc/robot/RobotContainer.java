@@ -5,8 +5,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
@@ -133,14 +131,6 @@ public class RobotContainer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        tankDrive = new TankDrive<>(
-//                DrivetrainConstantsFactory.createDrivetrainConstants(),
-//                config,
-//                frontLeftMotor,
-//                frontRightMotor,
-//                backLeftMotor,
-//                backRightMotor
-//        );
         intakeXShooter = new IntakeXShooter(
                 IntakeXShooterConstantsFactory.createIntakeXShooterConstants(),
                 shootMotor,
@@ -166,19 +156,9 @@ public class RobotContainer {
                 .deadband(0.1)
 //                .scaleTranslation(0.8)
                 .allianceRelativeControl(true);
-        swerveDrive.setDefaultCommand(swerveDrive.driveFieldOriented(driveAngularInput));
-//        swerveDrive.setDefaultCommand(swerveDrive.driveRobotRelative(driveAngularInput));
-//        swerveDrive.setDefaultCommand(swerveDrive.driveCommand(
-//                () -> -MathUtil.applyDeadband(driverController.getLeftY(), 0.1), // קדימה/אחורה
-//                () -> -MathUtil.applyDeadband(driverController.getLeftX(), 0.1), // ימינה/שמאלה
-//                () -> -MathUtil.applyDeadband(driverController.getRightX(), 0.1), // סיבוב
-//                () -> -MathUtil.applyDeadband(driverController.getRightY(), 0.1) // סיבוב
-//        ));
+        //swerveDrive.setDefaultCommand(swerveDrive.driveFieldOriented(driveAngularInput));
+        swerveDrive.setDefaultCommand(swerveDrive.driveRobotRelative(driveAngularInput));
 
-//        driverChooser.setDefaultOption("Arcade", new DriveArcadeCommand(tankDrive, driverController));
-//        driverChooser.addOption("Tank", new DriveTankCommand(tankDrive, driverController));
-//        SmartDashboard.putData("Drive Mode", driverChooser);
-//        drivetrain.setDefaultCommand(driverChooser.getSelected());
 
         loadAutos();
         // Configure the trigger bindings
@@ -192,7 +172,6 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
 
         Command autonomousShootCommand = GenericSubsystemCommandFactory.getAsSubsystemsCommand(
-//                new AutonomousShootCommand(intakeXShooter, feed, 10),
                 aimCommand().onlyIf(() -> FieldUtils.isInAllianceSide(swerveDrive.getPose())),
                 "Auto Shoot Command");
         autoChooser.addOption("Bottom Ramp", Autos.bottomRampAuto(autonomousShootCommand, backIntakeCommand(), swerveDrive.stop()));
@@ -200,7 +179,6 @@ public class RobotContainer {
         autoChooser.addOption("Upper Ramp", Autos.upperRampAuto(autonomousShootCommand, backIntakeCommand()));
         autoChooser.addOption("Upper Trench", Autos.upperTrenchAuto(autonomousShootCommand, backIntakeCommand()));
         autoChooser.addOption("Middle", Autos.bottomTrenchToMiddle(autonomousShootCommand, backIntakeCommand(), openIntakeCommand()));
-//        autoChooser.addOption("Test", Autos.testAuto());
 
         SmartDashboard.putData("Auto", autoChooser);
     }
@@ -261,13 +239,6 @@ public class RobotContainer {
         //TODO make to gyro go to zero
     }
 
-//    private void switchBreak() {
-//        boolean breakState = frontLeftMotor.getBreak();
-//        frontLeftMotor.setBreak(!breakState);
-//        frontRightMotor.setBreak(!breakState);
-//        backLeftMotor.setBreak(!breakState);
-//        backRightMotor.setBreak(!breakState);
-//    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
