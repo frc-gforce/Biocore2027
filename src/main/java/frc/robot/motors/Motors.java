@@ -6,10 +6,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
  * Enumeration representing all the motors on the robot.
  */
 public enum Motors {
-    FRONT_LEFT(18, "Front Left Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, true, CanbusLoop.rio),
-    FRONT_RIGHT(17, "Front Right Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, false, CanbusLoop.rio),
-    BACK_RIGHT(16, "Back Right Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, false, CanbusLoop.rio),
-    BACK_LEFT(19, "Back Left Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, true, CanbusLoop.rio),
+    FRONT_LEFT(1, "Front Left Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, true, CanbusLoop.rio),
+    FRONT_RIGHT(3, "Front Right Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, false, CanbusLoop.rio),
+    BACK_RIGHT(8, "Back Right Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, false, CanbusLoop.rio),
+    BACK_LEFT(6, "Back Left Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, true, CanbusLoop.rio),
     SHOOT(10, "Shoot Motor", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
     FEED(23, "Feed Motor", MotorType.kBrushed, MotorBrand.SPARK_MAX, true, CanbusLoop.rio),
     BACK_RIGHT_INTAKE(9, "Back Right Intake Motor", MotorType.kBrushless, MotorBrand.TALON_FX, false, CanbusLoop.rio),
